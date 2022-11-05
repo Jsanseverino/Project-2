@@ -1,0 +1,70 @@
+---
+title: '"Project 1-Julien Sanseverino'
+output: html_document
+date: "2022-10-12"
+---
+
+```{r}
+baseball_data<-read.csv("~/Documents/CPSC292/Project #1/foul-balls data.csv")
+```
+
+1.  Graph Represents the Distribution of Exit Velocities Hit into Each Zone
+
+```{r}
+library(ggplot2)
+Zone<-factor(baseball_data$used_zone)
+graph1<-ggplot(baseball_data, aes(x=Zone,y=exit_velocity, fill = Zone)) +
+  geom_boxplot() + 
+  scale_fill_manual(values=c("purple","blue","light green","maroon", "orange","pink","yellow")) +
+  xlab("Zone") + ylab("Exit Velocity") + ggtitle("Exit Velocity vs Zone Baseball Landed")
+print(graph1) +
+theme_linedraw()
+
+#fill=c("purple","blue","light green","maroon", "orange","pink","yellow")
+```
+
+Balls that reach zone 6 and 7 are some of the hardest hit balls, which makes sense since they are the zones in the outfield or furthest away. Zones 4 and 5 had the greatest range of exit velocities
+
+2.  How accurately can we predict where foul balls are hit?
+
+
+```{r}
+baseball_data$correct<-baseball_data$used_zone==baseball_data$predicted_zone
+
+newdf <- data.frame("Prediction" = c("Correct","Not Correct"), "value" =                c(sum(baseball_data$correct==TRUE)/length(baseball_data$correct),             sum(baseball_data$correct==FALSE)/length(baseball_data$correct)))
+
+ggplot(newdf, aes(x="", y=value , fill = Prediction )) + 
+ggtitle("Correct vs Incorrect Zone Prediction") +
+theme(plot.title = element_text(hjust = 0.5), 
+      axis.text = theme_void(TRUE),
+      axis.ticks = theme_void(TRUE),
+      panel.grid  = theme_void(TRUE)) +
+geom_col(color="black") +
+geom_text(aes(label=c("0.99", "0.01")), position=position_stack(vjust = 0.5)) +
+coord_polar(theta="y") +
+theme_void()
+
+```
+
+The pie chart represents the percentage of how accurately we were able to predict where a foul will land.
+
+Correct= the predicted zone matched the "used zone" (actual zone where the ball landed). Incorrect= the predicted zone DID NOT match the "used zone" (actual zone where the ball landed).
+
+99% of the foul balls hit landed in the predicted zones.
+
+```{r}
+correct<-baseball_data$predicted_zone==baseball_data$used_zone
+as.numeric(correct)
+table(correct)
+11/906
+895/906
+```
+
+
+Corrections:
+Added a title for the legend and what the colors represent
+Addded a main title for the pie chart so that we know what data we are looking at. 
+ggtitle centering for title centering
+got rid of grey background in pie chart
+added a new title for legend in graph one
+Shortened the graph title names
