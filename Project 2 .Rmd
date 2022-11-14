@@ -1,0 +1,30 @@
+---
+title: '"Project 2- Julien and Vishal '
+output: html_document
+date: "2022-10-12"
+---
+
+```{r}
+baseball_data<-read.csv("~/Documents/CPSC292/Project #1/foul-balls data.csv")
+```
+
+1.  Graph Represents the Distribution of Exit Velocities Hit into Each Zone
+Make the graph give the average exit velocity for a specific zone with new loop:
+
+```{r}
+library(ggplot2)
+for (i in 1:7) {
+  
+  
+}
+Zone<-factor(baseball_data$used_zone)
+graph1<-ggplot(baseball_data, aes(x=Zone,y=exit_velocity, fill = Zone)) +
+  geom_boxplot() + 
+  scale_fill_manual(values=c("purple","blue","light green","maroon", "orange","pink","yellow")) +
+  xlab("Zone") + ylab("Exit Velocity") + ggtitle("Exit Velocity vs Zone Baseball Landed")
+print(graph1) +
+theme_linedraw()
+
+#fill=c("purple","blue","light green","maroon", "orange","pink","yellow")
+```
+
