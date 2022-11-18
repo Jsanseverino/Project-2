@@ -1,0 +1,54 @@
+---
+title: '"Project 2- Julien and Vishal '
+output: html_document
+date: "2022-10-12"
+---
+
+```{r}
+baseball_data<-read.csv("~/Documents/CPSC292/Project #1/foul-balls data.csv")
+```
+
+1.  Graph Represents the Distribution of Exit Velocities Hit into Each Zone
+Make the graph give the average exit velocity for a specific zone with new loop:
+
+```{r}
+baseball_data <- baseball_data[!is.na(baseball_data$exit_velocity),] #this function removes all of the NA's from the exit velocity column in the original data set "baeball_data." Cleans up data set. 
+newerdf <- data.frame(matrix(ncol = 8, nrow = 7))
+colnames(newerdf) <- colnames(baseball_data) #lines 16 and 17: Newerdf is new data frame and in line 17 we gave this new data frame the same column names as in the original data set
+current.highest <- c(0, 0, 0, 0, 0, 0, 0, 0)
+row.index <- c(0, 0, 0, 0, 0, 0, 0, 0) #created empty vectors for the desired values: the highest exit velocity, and the zone it was found in
+
+baseball2 <- function(current.zone){
+  current.highest <- 0
+  current.index <- 0
+  for (i in 1:nrow(current.zone)){
+    if (current.zone$exit_velocity[i] > current.highest){
+      current.highest = current.zone$exit_velocity[i]
+      current.index = i
+    }
+  }
+  return(current.zone[i,])
+}
+
+#The function allows us to pass a value through and verify if it is the highest exit velocity, placing values within our empty vectors: "current highest" and "current index".
+#The for loop below passes an exit velocity through the vector and it does it for every row in the current.zone data frame. If the exit velocity value in the next row is a larger value, it replaces the value and stores it in the "current.highest" vector. 
+
+#How does it know what zone it is? whats going on in line 25?
+
+for (i in 1:7){
+  newerdf[i,]=baseball2(baseball_data[as.numeric(baseball_data$used_zone)==i,])
+  #print(baseball2(baseball_data[as.numeric(baseball_data$used_zone)==i,]))
+}
+newerdf #prints out the data frame "newerdf"
+
+plot(exit_velocity~used_zone, data = newerdf,
+     xlab = "Zone",
+     ylab = "Exit velocity (mph)",
+     main = "Highest exit velocity per zone",
+     pch = 11,
+     col = used_zone)
+
+#for loop in the graph replaces the rows in the "newerdf" data frame and sets it equal to the used zone represented by "i" for the original baseball data set. We also needed to convert the used_zone column values to numeric data because they were originally character data
+#graph visualization added to represent the highest exit velocity found in each zone. This can help to find where the most dangerous seats are at a baseball game and improve fan safety overall at MLB games. 
+```
+
